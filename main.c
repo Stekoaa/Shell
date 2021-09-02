@@ -20,6 +20,7 @@
 #define FONT_RESET "\033[0m\n"
 #define FONT_RESET_W "\033[0m"
 
+
 char HISTORY_PATH[PATH_MAX];
 char *LAST_COMMAND;
 
@@ -59,6 +60,7 @@ char *builtin[] ={
         "time"
 };
 
+
 char *builtin_description[] = {
         " - changes directory to the directory specified, throws an error if the directory does not exist",
         " [source] [destination] = copies contents of source file to destination file",
@@ -74,6 +76,7 @@ char *builtin_description[] = {
         " [name] - removes given file",
         " - shows current time",
 };
+
 
 int (*builtin_func[]) (char **) = {
         &shell_cd,
@@ -91,9 +94,11 @@ int (*builtin_func[]) (char **) = {
         &shell_time
 };
 
+
 int number_of_builtin(){
     return sizeof(builtin) / sizeof(char*);
 }
+
 
 void redirect_out(char *file_name){
     int out = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
@@ -112,6 +117,7 @@ void redirect_out(char *file_name){
     }
 }
 
+
 void redirect_in(char *file_name){
     int in = open(file_name, O_RDONLY);
 
@@ -129,6 +135,7 @@ void redirect_in(char *file_name){
     }
 }
 
+
 void redirect_out_append(char *file_name){
     int out = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 
@@ -145,6 +152,7 @@ void redirect_out_append(char *file_name){
         perror("File closing error!");
     }
 }
+
 
 void create_pipe(char **args){
     int fd[2];
@@ -189,6 +197,7 @@ int shell_cd(char **args){
 
     return 1;
 }
+
 
 int shell_cp(char **args){
     if(args[1] == NULL){
@@ -283,6 +292,7 @@ int shell_history_clear(char **args){
     return 1;
 }
 
+
 int shell_history_execute(char **args){
 
     if(args[1] == NULL){
@@ -303,7 +313,6 @@ int shell_history_execute(char **args){
     int status = 1;
     char *line = malloc(BUFFER_SIZE * sizeof(char));
 
-
     while(fgets(line, BUFFER_SIZE, f_ptr) != NULL && counter != command_number){
         counter++;
     }
@@ -317,11 +326,11 @@ int shell_history_execute(char **args){
         status = shell_start(line);
     }
 
-
     free(line);
     fclose(f_ptr);
     return status;
 }
+
 
 int shell_history_execute_last(char **args){
 
@@ -332,7 +341,6 @@ int shell_history_execute_last(char **args){
     int status  = shell_start(LAST_COMMAND);
     return status;
 }
-
 
 
 int shell_ls(char **args){
@@ -452,6 +460,7 @@ int shell_mkf(char **args){
     return 1;
 }
 
+
 int shell_rabbit(char **args){
 
     if(args[1] == NULL){
@@ -473,7 +482,6 @@ int shell_rabbit(char **args){
     }
 
     fclose(fptr);
-
     return 1;
 }
 
@@ -495,6 +503,7 @@ int shell_rmf(char **args){
 
     return 1;
 }
+
 
 int shell_time(char **args){
     time_t curr_time = time(NULL);
@@ -559,6 +568,7 @@ char *read_line(){
     }
 }
 
+
 char *add_spaces(char *line){
 
     int i;
@@ -584,6 +594,7 @@ char *add_spaces(char *line){
 
     return tokenized;
 }
+
 
 int shell_launch(char **args){
 
@@ -614,6 +625,7 @@ int shell_launch(char **args){
 
     return 1;
 }
+
 
 int shell_execute(char **args){
 
@@ -714,6 +726,7 @@ void shell_loop(){
 
     fclose(f_ptr);
 }
+
 
 int main() {
     LAST_COMMAND = (char*)malloc(sizeof(char) * BUFFER_SIZE);
